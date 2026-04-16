@@ -1,55 +1,109 @@
-# API de Livros - Node.js
+# API de Livros - Node.js + Express + JWT
 
-## Descrição
-API REST completa desenvolvida em Node.js com Express e banco de dados SQLite.
+API REST desenvolvida para gerenciamento de livros com autenticação JWT, CRUD completo, relacionamentos entre tabelas e testes automatizados.
 
-## Tecnologias utilizadas
-- Node.js
-- Express
-- SQLite
-- Cors
-- Nodemon
-- Postman
+Tecnologias utilizadas: Node.js, Express, SQLite3, JWT (jsonwebtoken), bcrypt, Jest, Supertest e CORS.
 
-## Como executar
+Deploy da API: https://api-livros-11qx.onrender.com
 
-```bash
+## Instalação do projeto
+
+Clone o repositório:
+git clone https://github.com/seu-usuario/api-livros.git
+
+Entre na pasta:
+cd api-livros
+
+Instale as dependências:
 npm install
+
+Execute o projeto:
+npm start
+
+Ou modo desenvolvimento:
 npm run dev
 
-Servidor:
-http://localhost:3000
+## Autenticação JWT
 
-Endpoints
-- GET / → API funcionando
-- GET /livros → Lista todos os livros
-- GET /livros/:id → Busca por ID
-- POST /livros → Cria novo livro
-- PUT /livros/:id → Atualiza livro
-- DELETE /livros/:id → Deleta livro
-
-Exemplo de POST
+Registrar usuário:
+POST /register
+Body:
 {
-  "titulo": "Livro Teste",
-  "autor": "Yukio",
-  "ano": 2023,
-  "genero": "Teste",
-  "quantidade": 5
+  "email": "teste@teste.com",
+  "senha": "123456"
 }
-Validações
-Campos obrigatórios
-Ano deve ser número
-Quantidade não pode ser negativa
-Erros
-400 → Dados inválidos
-404 → Não encontrado
-Testes
 
-Testado no Postman com:
+Login:
+POST /login
+Body:
+{
+  "email": "teste@teste.com",
+  "senha": "123456"
+}
 
-GET
-POST
-PUT
-DELETE
-erro 400
-erro 404
+Resposta:
+{
+  "token": "JWT_TOKEN_AQUI"
+}
+
+## Uso do token
+
+Todas as rotas de livros são protegidas.
+Enviar no header:
+Authorization: Bearer SEU_TOKEN
+
+## Rotas da API
+
+Usuários:
+GET /usuarios
+
+Livros (protegido):
+GET /livros
+GET /livros/:id
+POST /livros
+PUT /livros/:id
+DELETE /livros/:id
+
+Body do POST e PUT:
+{
+  "titulo": "Livro exemplo",
+  "autor_id": 1,
+  "ano": 2024,
+  "genero": "Ficção",
+  "quantidade": 10
+}
+
+Relacionamento (JOIN):
+GET /livros-com-autores
+
+## Testes automatizados
+
+Executar testes:
+npm test
+
+Ferramentas: Jest e Supertest
+
+## Estrutura do projeto
+
+api-livros/
+database.js
+server.js
+index.js
+tests/
+  auth.test.js
+  livros.test.js
+postman/
+  api-livros.postman_collection.json
+README.md
+
+## Observações
+
+Senhas criptografadas com bcrypt.
+Autenticação feita com JWT.
+Banco de dados SQLite.
+API pronta para deploy no Render.
+Middleware protege rotas de livros.
+
+## Projeto acadêmico
+
+Desenvolvido para disciplina de backend com Node.js, Express e SQLite.
