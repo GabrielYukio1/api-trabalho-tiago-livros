@@ -9,6 +9,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
 function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
 
@@ -20,14 +21,16 @@ function authMiddleware(req, res, next) {
     const decoded = jwt.verify(token, "segredo");
     req.userId = decoded.id;
     next();
-  } catch {
+  } catch (err) {
     return res.sendStatus(401);
   }
 }
 
+
 app.get("/", (req, res) => {
   res.json({ mensagem: "API de Livros funcionando!" });
 });
+
 
 app.get("/usuarios", (req, res) => {
   db.all("SELECT * FROM usuarios", [], (err, rows) => {
@@ -35,6 +38,7 @@ app.get("/usuarios", (req, res) => {
     res.json(rows);
   });
 });
+
 
 app.post("/register", (req, res) => {
   const { email, senha } = req.body;
@@ -58,6 +62,7 @@ app.post("/register", (req, res) => {
   );
 });
 
+
 app.post("/login", (req, res) => {
   const { email, senha } = req.body;
 
@@ -69,7 +74,10 @@ app.post("/login", (req, res) => {
     "SELECT * FROM usuarios WHERE email = ?",
     [email],
     (err, usuario) => {
-      if (err) return res.status(500).json({ erro: "Erro no banco." });
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ erro: "Erro no banco." });
+      }
 
       if (!usuario) {
         return res.status(401).json({ erro: "Usuário não encontrado." });
@@ -180,7 +188,6 @@ app.delete("/livros/:id", authMiddleware, (req, res) => {
     res.json({ mensagem: "Deletado com sucesso." });
   });
 });
-
 
 
 app.get("/livros-com-autores", (req, res) => {
